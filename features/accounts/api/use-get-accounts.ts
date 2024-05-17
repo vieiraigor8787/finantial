@@ -6,6 +6,7 @@ export const useGetAccounts = () => {
   const query = useQuery({
     queryKey: ['accounts'],
     queryFn: async () => {
+      //RPC
       const res = await client.api.accounts.$get()
 
       if (!res.ok) {
