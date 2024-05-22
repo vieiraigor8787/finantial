@@ -2,9 +2,6 @@
 
 import { Edit, MoreHorizontal, Trash } from 'lucide-react'
 
-import { useOpenAccount } from '@/features/accounts/hooks/use-open-account'
-import { useDeleteAccount } from '@/features/accounts/api/use-delete-account'
-
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -13,6 +10,8 @@ import {
   DropdownMenuContent,
 } from '@/components/ui/dropdown-menu'
 import { useConfirm } from '@/hooks/use-confirm'
+import { useDeleteCategory } from '@/features/categories/api/use-delete-category'
+import { useOpenCategory } from '@/features/categories/hooks/use-open-category'
 
 type Props = {
   id: string
@@ -23,8 +22,8 @@ export const Actions = ({ id }: Props) => {
     'Tem certeza?',
     'Você não poderá reverter esta ação'
   )
-  const deleteMutation = useDeleteAccount(id)
-  const { onOpen } = useOpenAccount()
+  const deleteMutation = useDeleteCategory(id)
+  const { onOpen } = useOpenCategory()
 
   const handleDelete = async () => {
     const ok = await confirm()

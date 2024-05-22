@@ -60,7 +60,7 @@ export const AccountForm = ({
               <FormControl>
                 <Input
                   disabled={disabled}
-                  placeholder="p.ex. Dinheiro, débito, crédito"
+                  placeholder="p.ex. mercado, luz, aluguel, gasolina..."
                   {...field}
                 />
               </FormControl>
