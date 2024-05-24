@@ -141,6 +141,38 @@ const app = new Hono()
     }
   )
   .post(
+    '/bulk-create',
+    clerkMiddleware(),
+    zValidator(
+      'json',
+      z.array(
+        insertTransactionSchema.omit({
+          id: true,
+        })
+      )
+    ),
+    async (c) => {
+      const auth = getAuth(c)
+      const values = c.req.valid('json')
+
+      if (!auth?.userId) {
+        return c.json({ error: 'Unauthrorized' }, 401)
+      }
+
+      const data = await db
+        .insert(transactions)
+        .values(
+          values.map((value) => ({
+            id: createId(),
+            ...value,
+          }))
+        )
+        .returning()
+
+      return c.json({ data })
+    }
+  )
+  .post(
     '/bulk-delete',
     clerkMiddleware(),
     zValidator(
@@ -153,7 +185,9 @@ const app = new Hono()
       const auth = getAuth(c)
       const values = c.req.valid('json')
 
-      if (!auth?.userId) return c.json({ error: 'Unauthrorized' }, 401)
+      if (!auth?.userId) {
+        return c.json({ error: 'Unauthrorized' }, 401)
+      }
 
       const transactionsToDelete = db.$with('transactions_to_delete').as(
         db
