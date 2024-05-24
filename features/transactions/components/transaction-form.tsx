@@ -1,7 +1,9 @@
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
+import { Trash } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { insertTransactionSchema } from '@/db/schema'
 import {
   Form,
   FormControl,
@@ -9,10 +11,8 @@ import {
   FormItem,
   FormLabel,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+import { Select } from '@/components/select'
 import { Button } from '@/components/ui/button'
-import { Trash } from 'lucide-react'
-import { insertTransactionSchema } from '@/db/schema'
 
 const formSchema = z.object({
   date: z.date(),
@@ -70,16 +70,38 @@ export const TransactionForm = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <FormField
-          name="name"
+          name="accountId"
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nome</FormLabel>
+              <FormLabel>Conta</FormLabel>
               <FormControl>
-                <Input
+                <Select
+                  placeholder="Selecione uma conta"
+                  options={accountOptions}
+                  onCreate={onCreateAccount}
+                  value={field.value}
+                  onChange={field.onChange}
                   disabled={disabled}
-                  placeholder="p.ex. mercado, luz, aluguel, gasolina..."
-                  {...field}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="categoryId"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Categoria</FormLabel>
+              <FormControl>
+                <Select
+                  placeholder="Selecione uma categoria"
+                  options={categoryOptions}
+                  onCreate={onCreateCategory}
+                  value={field.value}
+                  onChange={field.onChange}
+                  disabled={disabled}
                 />
               </FormControl>
             </FormItem>

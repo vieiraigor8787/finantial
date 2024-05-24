@@ -2,7 +2,7 @@
 import { Loader2, Plus } from 'lucide-react'
 
 import { useNewCategory } from '@/features/categories/hooks/use-new-category'
-import { useBulkDeleteCategory } from '@/features/categories/api/use-bulk-delete-categories'
+import { useBulkDeleteCategories } from '@/features/categories/api/use-bulk-delete-categories'
 import { useGetCategories } from '@/features/categories/api/use-get-categories'
 
 import { Button } from '@/components/ui/button'
@@ -14,7 +14,7 @@ import { columns } from './columns'
 
 const CategoriesPage = () => {
   const newCategory = useNewCategory()
-  const deleteCategories = useBulkDeleteCategory()
+  const deleteCategories = useBulkDeleteCategories()
   const categoriesQuery = useGetCategories()
   const categories = categoriesQuery.data || []
 
