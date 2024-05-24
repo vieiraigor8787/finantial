@@ -13,6 +13,9 @@ import {
 } from '@/components/ui/form'
 import { Select } from '@/components/select'
 import { Button } from '@/components/ui/button'
+import { DatePicker } from '@/components/date-picker'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 
 const formSchema = z.object({
   date: z.date(),
@@ -20,7 +23,7 @@ const formSchema = z.object({
   categoryId: z.string().nullable().optional(),
   payee: z.string(),
   amount: z.string(),
-  types: z.string().nullable().optional(),
+  notes: z.string().nullable().optional(),
 })
 
 const apiSchema = insertTransactionSchema.omit({
@@ -70,6 +73,22 @@ export const TransactionForm = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <FormField
+          name="date"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Conta</FormLabel>
+              <FormControl>
+                <DatePicker
+                  value={field.value}
+                  onChange={field.onChange}
+                  disabled={disabled}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
           name="accountId"
           control={form.control}
           render={({ field }) => (
@@ -102,6 +121,39 @@ export const TransactionForm = ({
                   value={field.value}
                   onChange={field.onChange}
                   disabled={disabled}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="payee"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Pagamento</FormLabel>
+              <FormControl>
+                <Input
+                  disabled={disabled}
+                  placeholder="Adicionar pagamento"
+                  {...field}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="notes"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Notas</FormLabel>
+              <FormControl>
+                <Textarea
+                  value={field.value ?? ''}
+                  disabled={disabled}
+                  placeholder="comentarios adicionais"
+                  {...field}
                 />
               </FormControl>
             </FormItem>
