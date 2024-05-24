@@ -1,9 +1,9 @@
 'use client'
 import { Loader2, Plus } from 'lucide-react'
 
-import { useBulkDeleteTransactions } from '@/features/transactions/api/use-bulk-delete-transactions'
-import { useGetTransaction } from '@/features/transactions/api/use-get-transaction'
 import { useNewTransaction } from '@/features/transactions/hooks/use-new-transaction'
+import { useGetAccounts } from '@/features/accounts/api/use-get-accounts'
+import { useBulkDeleteAccounts } from '@/features/accounts/api/use-bulk-delete-accounts'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -12,15 +12,15 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 import { columns } from './columns'
 
-const AccountsPage = () => {
+const TransactionsPage = () => {
   const newTransaction = useNewTransaction()
-  const deleteTransaction = useBulkDeleteTransactions()
-  const transactionsQuery = useGetTransaction()
-  const transactions = transactionsQuery.data || []
+  const deleteAccounts = useBulkDeleteAccounts()
+  const accountsQuery = useGetAccounts()
+  const accounts = accountsQuery.data || []
 
-  const isDisabled = transactionsQuery.isLoading || deleteTransaction.isPending
+  const isDisabled = accountsQuery.isLoading || deleteAccounts.isPending
 
-  if (transactionsQuery.isLoading) {
+  if (accountsQuery.isLoading) {
     return (
       <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
         <Card className="border-none drop-shadow-sm">
@@ -52,11 +52,11 @@ const AccountsPage = () => {
         <CardContent>
           <DataTable
             columns={columns}
-            data={transactions}
+            data={accounts}
             filterKey="nome"
             onDelete={(row) => {
               const ids = row.map((r) => r.original.id)
-              deleteTransaction.mutate({ ids })
+              deleteAccounts.mutate({ ids })
             }}
             disabled={isDisabled}
           />
@@ -66,4 +66,4 @@ const AccountsPage = () => {
   )
 }
 
-export default AccountsPage
+export default TransactionsPage

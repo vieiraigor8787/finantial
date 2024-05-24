@@ -13,9 +13,12 @@ import {
 } from '@/components/ui/form'
 import { Select } from '@/components/select'
 import { Button } from '@/components/ui/button'
-import { DatePicker } from '@/components/date-picker'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+
+import { DatePicker } from '@/components/date-picker'
+import { AmountInput } from '@/components/amount-input'
+import { convertAmountToMiliunits } from '@/lib/utils'
 
 const formSchema = z.object({
   date: z.date(),
@@ -62,7 +65,10 @@ export const TransactionForm = ({
   })
 
   const handleSubmit = (values: FormValues) => {
-    onSubmit(values)
+    const amount = parseFloat(values.amount)
+    const amountInMiliunits = convertAmountToMiliunits(amount)
+
+    onSubmit({ ...values, amount: amountInMiliunits })
   }
 
   const handleDelete = () => {
@@ -77,7 +83,7 @@ export const TransactionForm = ({
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Conta</FormLabel>
+              <FormLabel>Data</FormLabel>
               <FormControl>
                 <DatePicker
                   value={field.value}
@@ -143,6 +149,22 @@ export const TransactionForm = ({
           )}
         />
         <FormField
+          name="amount"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Valor</FormLabel>
+              <FormControl>
+                <AmountInput
+                  {...field}
+                  disabled={disabled}
+                  placeholder="0.00"
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
           name="notes"
           control={form.control}
           render={({ field }) => (
@@ -150,10 +172,10 @@ export const TransactionForm = ({
               <FormLabel>Notas</FormLabel>
               <FormControl>
                 <Textarea
+                  {...field}
                   value={field.value ?? ''}
                   disabled={disabled}
                   placeholder="comentarios adicionais"
-                  {...field}
                 />
               </FormControl>
             </FormItem>
@@ -171,7 +193,7 @@ export const TransactionForm = ({
             variant="outline"
           >
             <Trash className="size-4 mr-4" />
-            Deletar conta
+            Deletar transação
           </Button>
         )}
       </form>
